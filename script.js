@@ -1,6 +1,22 @@
 let submited = document.getElementById('submission');
+let tablerow = document.getElementById('table');
 submited.addEventListener('click',storeData);
 document.addEventListener('DOMContentLoaded',getInfo);
+tablerow.addEventListener('click',removeData);
+
+function removeData(e){
+    if(e.target.hasAttribute('href')){
+        let ele = e.target.parentElement;
+        let val = ele.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.textContent; 
+        ele = ele.parentElement;
+        if(confirm("Are You Sure?")){
+            deleteData(val);
+            ele.remove();
+        }
+        console.log(ele.previousElementSibling);
+    }
+}
+
 function getInfo(e){
     let data;
     if(localStorage.getItem('data')===null){
@@ -51,5 +67,24 @@ function storeData(e){
     }
     data.push(text);
     localStorage.setItem('data',JSON.stringify(data));
-    console.log(data);
+    document.getElementById('fullname').value="";
+    document.getElementById('rollnumber').value="";
+    document.getElementById('session').value="";
+    document.getElementById('bookname').value="";
+    document.getElementById('bookid').value="";
+}
+function deleteData(val){
+    let data;
+    if(localStorage.getItem('data')===null){
+        data = [];
+    }
+    else{
+        data = JSON.parse(localStorage.getItem('data'));
+    }
+    data.forEach((task,index) => {
+        if(task.toLowerCase().indexOf(val.toLowerCase()) != -1){
+            data.splice(index,1);
+        }
+    });
+    localStorage.setItem('data',JSON.stringify(data));
 }
