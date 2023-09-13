@@ -8,10 +8,13 @@ function removeData(e){
     if(e.target.hasAttribute('href')){
         let ele = e.target.parentElement;
         let val = ele.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.textContent; 
+        let name = ele.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.textContent
         ele = ele.parentElement;
+        
         if(confirm("Are You Sure?")){
             deleteData(val);
             ele.remove();
+            showAlert(`${name} returned a book !`,"success");
         }
         console.log(ele.previousElementSibling);
     }
@@ -36,42 +39,48 @@ function storeData(e){
     let session = document.getElementById('session').value;
     let bookname = document.getElementById('bookname').value;
     let bookid = document.getElementById('bookid').value;
-    let data =[];
-    // data.push(bookid);
-    // data.push(name);
-    // data.push(roll);
-    // data.push(bookname);
-    // data.push(session);
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date+' '+time;
-    // data.push(dateTime);
-    // data.push('<th><a herf="">x</a></th>')
-    let text = `<tr>
-    <th>${bookid}</th>
-    <th>${name}</th>
-    <th>${roll}</th>
-    <th>${bookname}</th>
-    <th>${session}</th>
-    <th>${dateTime}</th>
-    <th><a href="#">x</a></th>
-</tr>`;
-    let table = document.getElementById('table');
-    table.innerHTML+=text;
-    if(localStorage.getItem('data')===null){
-        data = [];
+    if(name === ''|| roll ==='' || session === '' || bookname ==='' || bookid ===''){
+        showAlert("Fill All The Fields ! ","error");
     }
     else{
-        data = JSON.parse(localStorage.getItem('data'));
+        let data =[];
+        // data.push(bookid);
+        // data.push(name);
+        // data.push(roll);
+        // data.push(bookname);
+        // data.push(session);
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateTime = date+' '+time;
+        // data.push(dateTime);
+        // data.push('<th><a herf="">x</a></th>')
+        let text = `<tr>
+        <th>${bookid}</th>
+        <th>${name}</th>
+        <th>${roll}</th>
+        <th>${bookname}</th>
+        <th>${session}</th>
+        <th>${dateTime}</th>
+        <th><a href="#">x</a></th>
+    </tr>`;
+        let table = document.getElementById('table');
+        table.innerHTML+=text;
+        if(localStorage.getItem('data')===null){
+            data = [];
+        }
+        else{
+            data = JSON.parse(localStorage.getItem('data'));
+        }
+        data.push(text);
+        localStorage.setItem('data',JSON.stringify(data));
+        document.getElementById('fullname').value="";
+        document.getElementById('rollnumber').value="";
+        document.getElementById('session').value="";
+        document.getElementById('bookname').value="";
+        document.getElementById('bookid').value="";
+        showAlert("Successfully Added !","success");
     }
-    data.push(text);
-    localStorage.setItem('data',JSON.stringify(data));
-    document.getElementById('fullname').value="";
-    document.getElementById('rollnumber').value="";
-    document.getElementById('session').value="";
-    document.getElementById('bookname').value="";
-    document.getElementById('bookid').value="";
 }
 function deleteData(val){
     let data;
@@ -87,4 +96,16 @@ function deleteData(val){
         }
     });
     localStorage.setItem('data',JSON.stringify(data));
+}
+
+function showAlert(msg,classname){
+    let div = document.createElement('div');
+    div.className = `alert ${classname}`;
+    div.appendChild(document.createTextNode(msg));
+    let maindiv= document.getElementById('form-div');
+    let form = document.getElementById('dataForm');
+    maindiv.insertBefore(div,form);
+    setTimeout(()=>{
+        document.querySelector('.alert').remove();
+    },3000);
 }
