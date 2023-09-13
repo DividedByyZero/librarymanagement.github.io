@@ -3,13 +3,23 @@
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" />
 <style>
-
+    .success , .error{
+      color: white;
+      padding: 5px;
+      margin: 5px 0px 15px 0px;
+    }
+    .success{
+      background: green;
+    }
+    .error{
+      background: red;
+    }
 </style>
 </head>
 <body>
     <h1>Library Management System</h1>
-    <div>
-        <form action="/action_page.php">
+    <div id="form-div">
+        <form id="dataForm">
           <label for="fname">Full Name</label>
           <input type="text" id="fullname"  placeholder="Your name..">
       
